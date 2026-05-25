@@ -172,11 +172,17 @@ function NotesView({ entries, onReset }) {
       const pageH = doc.internal.pageSize.getHeight();
       const imgH = (canvas.height * pageW) / canvas.width;
 
+      const marginMm = 15;
+      const margin = (marginMm / pageW) * canvas.width * (imgW / canvas.width);
+      // Hitung ulang dimensi gambar dengan margin kiri-kanan
+      const printW = pageW - marginMm * 2;
+      const printH = (canvas.height * printW) / canvas.width;
+
       let posY = 0;
-      while (posY < imgH) {
+      while (posY < printH) {
         if (posY > 0) doc.addPage();
-        doc.addImage(imgData, 'JPEG', 0, -posY, pageW, imgH);
-        posY += pageH;
+        doc.addImage(imgData, 'JPEG', marginMm, marginMm - posY, printW, printH);
+        posY += pageH - marginMm * 2;
       }
 
       doc.save(`catatan-kajian-${Date.now()}.pdf`);
