@@ -170,7 +170,6 @@ function NotesView({ entries, onReset }) {
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
-      const imgH = (canvas.height * pageW) / canvas.width;
 
       const marginMm = 15;
       const printW = pageW - marginMm * 2;
