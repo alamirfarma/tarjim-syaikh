@@ -173,8 +173,6 @@ function NotesView({ entries, onReset }) {
       const imgH = (canvas.height * pageW) / canvas.width;
 
       const marginMm = 15;
-      const margin = (marginMm / pageW) * canvas.width * (imgW / canvas.width);
-      // Hitung ulang dimensi gambar dengan margin kiri-kanan
       const printW = pageW - marginMm * 2;
       const printH = (canvas.height * printW) / canvas.width;
 
