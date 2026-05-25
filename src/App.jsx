@@ -36,32 +36,72 @@ function StatusBadge({ status }) {
   );
 }
 
-function SubtitlePanel({ arabicText, indonesianText, isTranslating, arabicFontSize, indonesianFontSize }) {
+// Komponen kartu pasangan Arab + Terjemahan
+function EntryCard({ arabic, indonesian, isLive, arabicFontSize, indonesianFontSize, index }) {
   return (
-    <div className="subtitle-wrap">
-      <div className="panel panel-arabic">
-        <div className="panel-label">
-          <span className="panel-flag">🕌</span> Ucapan Syaikh
+    <div className={`entry-card${isLive ? ' entry-card--live' : ''}`}>
+      {isLive && <div className="live-badge"><span className="pulse-dot" /> Sedang diterjemahkan</div>}
+      <p
+        className="entry-arabic"
+        dir="rtl"
+        lang="ar"
+        style={{ fontSize: arabicFontSize + 'px' }}
+      >
+        {arabic}
+      </p>
+      <div className="entry-divider" />
+      {indonesian
+        ? <p className="entry-indonesian" style={{ fontSize: indonesianFontSize + 'px' }}>{indonesian}</p>
+        : <span className="translating-indicator">
+            <span className="dots"><span /><span /><span /></span>
+            Menerjemahkan…
+          </span>
+      }
+      {!isLive && (
+        <div className="entry-index">#{index}</div>
+      )}
+    </div>
+  );
+}
+
+// Feed riwayat — terbaru di atas
+function HistoryFeed({ entries, liveArabic, liveIndonesian, isTranslating, arabicFontSize, indonesianFontSize }) {
+  const showLive = liveArabic && isTranslating;
+  const reversed = [...entries].reverse();
+
+  return (
+    <div className="history-feed">
+      {!showLive && !entries.length && (
+        <div className="feed-empty">
+          <span className="feed-empty-icon">🎙️</span>
+          <p>Tekan <strong>Mulai</strong> lalu arahkan mikrofon ke ucapan Syaikh.</p>
+          <p>Setiap kalimat yang selesai dikenali akan muncul di sini.</p>
         </div>
-        <div className="panel-text arabic-text" dir="rtl" lang="ar"
-          style={{ fontSize: arabicFontSize + 'px' }}>
-          {arabicText || <span className="placeholder-text">Kalimat bahasa Arab akan muncul di sini</span>}
-        </div>
-      </div>
-      <div className="panel panel-indonesian">
-        <div className="panel-label">
-          <span className="panel-flag">🇮🇩</span> Terjemahan Indonesia
-        </div>
-        <div className="panel-text indonesian-text" style={{ fontSize: indonesianFontSize + 'px' }}>
-          {isTranslating
-            ? <span className="translating-indicator">
-                <span className="dots"><span /><span /><span /></span>
-                Menerjemahkan
-              </span>
-            : indonesianText || <span className="placeholder-text">Terjemahan akan muncul di sini</span>
-          }
-        </div>
-      </div>
+      )}
+
+      {/* Kartu live — selalu paling atas saat sedang terjemahan */}
+      {showLive && (
+        <EntryCard
+          arabic={liveArabic}
+          indonesian={liveIndonesian}
+          isLive={true}
+          arabicFontSize={arabicFontSize}
+          indonesianFontSize={indonesianFontSize}
+        />
+      )}
+
+      {/* Kartu riwayat — dibalik agar terbaru di atas */}
+      {reversed.map((entry, i) => (
+        <EntryCard
+          key={entry.id}
+          arabic={entry.arabic}
+          indonesian={entry.indonesian}
+          isLive={false}
+          arabicFontSize={arabicFontSize}
+          indonesianFontSize={indonesianFontSize}
+          index={entries.length - i}
+        />
+      ))}
     </div>
   );
 }
@@ -78,28 +118,21 @@ function NotesView({ entries, onReset }) {
     if (entries.length === 0) return;
     setExporting(true);
     try {
-      // Load libraries
       await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
       await import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
       const jsPDF = window.jspdf.jsPDF;
       const html2canvas = window.html2canvas;
-  
-      // Buat elemen HTML sementara di luar layar
+
       const container = document.createElement('div');
       container.style.cssText = `
-        position: fixed;
-        left: -9999px;
-        top: 0;
-        width: 794px;
-        background: white;
-        font-family: 'Noto Naskh Arabic', 'Lato', sans-serif;
-        padding: 0;
+        position: fixed; left: -9999px; top: 0; width: 794px;
+        background: white; font-family: 'Noto Naskh Arabic', 'Lato', sans-serif; padding: 0;
       `;
-  
+
       const tanggal = new Date().toLocaleDateString('id-ID', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
-  
+
       container.innerHTML = `
         <div style="background:#0d1b2a; padding:18px 30px; display:flex; justify-content:space-between; align-items:center;">
           <span style="color:#c9a84c; font-size:22px; font-weight:bold; font-family:sans-serif;">Catatan Kajian</span>
@@ -110,11 +143,11 @@ function NotesView({ entries, onReset }) {
             <div style="margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #e0e0e0;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
                 <span style="color:#c9a84c; font-weight:bold; font-size:13px; font-family:sans-serif; min-width:24px; flex-shrink:0;">${i + 1}.</span>
-                <div style="text-align:right; font-family:'Noto Naskh Arabic',serif; font-size:18px; color:#333; direction:rtl; flex:1; margin-left:12px; word-break:break-word; overflow-wrap:break-word;">
+                <div style="text-align:right; font-family:'Noto Naskh Arabic',serif; font-size:18px; color:#333; direction:rtl; flex:1; margin-left:12px; word-break:break-word;">
                   ${entry.arabic}
                 </div>
               </div>
-              <div style="font-family:sans-serif; font-size:13px; color:#1a1a1a; line-height:1.7; margin-left:24px; margin-right:0; word-break:break-word; overflow-wrap:break-word; max-width:100%;">
+              <div style="font-family:sans-serif; font-size:13px; color:#1a1a1a; line-height:1.7; margin-left:24px; word-break:break-word;">
                 ${entry.indonesian}
               </div>
               <div style="text-align:right; font-size:10px; color:#aaa; font-family:sans-serif; margin-top:6px;">
@@ -128,34 +161,24 @@ function NotesView({ entries, onReset }) {
           <span style="color:#506070; font-size:10px; font-family:sans-serif;">${entries.length} kalimat</span>
         </div>
       `;
-  
+
       document.body.appendChild(container);
-  
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-      });
-  
+      const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' });
       document.body.removeChild(container);
-  
+
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
-  
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-  
-      // Kalau konten lebih dari satu halaman
+      const imgH = (canvas.height * pageW) / canvas.width;
+
       let posY = 0;
       while (posY < imgH) {
         if (posY > 0) doc.addPage();
-        doc.addImage(imgData, 'JPEG', 0, -posY, imgW, imgH);
+        doc.addImage(imgData, 'JPEG', 0, -posY, pageW, imgH);
         posY += pageH;
       }
-  
+
       doc.save(`catatan-kajian-${Date.now()}.pdf`);
     } catch (err) {
       alert('Gagal export PDF: ' + err.message);
@@ -190,7 +213,7 @@ function NotesView({ entries, onReset }) {
       <div className="notes-actions">
         <button className="btn btn-secondary" onClick={handleCopy} disabled={entries.length === 0}>Salin Semua</button>
         <button className="btn btn-pdf" onClick={handleExportPDF} disabled={entries.length === 0 || exporting}>
-          {exporting ? 'Menyiapkan PDF' : 'Export PDF'}
+          {exporting ? 'Menyiapkan PDF…' : 'Export PDF'}
         </button>
         <button className="btn btn-primary" onClick={onReset}>Mulai Sesi Baru</button>
       </div>
@@ -220,7 +243,6 @@ export default function App() {
 
   const { entries, addEntry, clear } = useTranscriptManager();
 
-  // Semua callback dalam satu ref — selalu fresh, tidak pernah stale
   const callbacksRef = useRef({});
   callbacksRef.current = {
     onResult: async (arabicText) => {
@@ -238,10 +260,12 @@ export default function App() {
         setErrorMsg('Error: ' + err.message);
       } finally {
         setIsTranslating(false);
+        setCurrentArabic('');
+        setCurrentIndonesian('');
       }
     },
-    onError: (msg) => setErrorMsg(msg),
-    onStatusChange: (s) => setMicStatus(s),
+    onError:        (msg) => setErrorMsg(msg),
+    onStatusChange: (s)   => setMicStatus(s),
   };
 
   const { start, stop } = useSpeechRecognition(callbacksRef);
@@ -304,16 +328,14 @@ export default function App() {
           <FontSlider label="Ukuran teks Indonesia" value={indoFontSize} onChange={setIndoFontSize} min={14} max={72} />
         </div>
         {errorMsg && <div className="error-banner">{errorMsg}</div>}
-        <SubtitlePanel
-          arabicText={currentArabic}
-          indonesianText={currentIndonesian}
+        <HistoryFeed
+          entries={entries}
+          liveArabic={currentArabic}
+          liveIndonesian={currentIndonesian}
           isTranslating={isTranslating}
           arabicFontSize={arabicFontSize}
           indonesianFontSize={indoFontSize}
         />
-        {mode === 'recording' && entries.length > 0 && (
-          <div className="session-counter">{entries.length} kalimat tercatat</div>
-        )}
       </main>
       <Footer />
     </div>
