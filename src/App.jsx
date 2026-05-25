@@ -166,23 +166,61 @@ function NotesView({ entries, onReset }) {
       const canvas = await html2canvas(container, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' });
       document.body.removeChild(container);
 
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
-
       const marginMm = 15;
       const printW = pageW - marginMm * 2;
-      const printH = (canvas.height * printW) / canvas.width;
 
-      let posY = 0;
-      while (posY < printH) {
-        if (posY > 0) doc.addPage();
-        doc.addImage(imgData, 'JPEG', marginMm, marginMm - posY, printW, printH);
-        posY += pageH - marginMm * 2;
+      // Tinggi gambar header (proporsi dari canvas)
+      const headerEl = container.querySelector('div:first-child');
+      const footerEl = container.querySelector('div:last-child');
+      const bodyEl   = container.querySelector('div:nth-child(2)');
+
+      // Render ulang per bagian: header, tiap entry, footer
+      const sections = container.querySelectorAll('div:nth-child(2) > div');
+
+      // Render header
+      const headerCanvas = await html2canvas(container.querySelector('div:first-child') || container, {
+        scale: 2, useCORS: true, backgroundColor: '#0d1b2a'
+      });
+
+      const doc2 = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pw = doc2.internal.pageSize.getWidth();
+      const ph = doc2.internal.pageSize.getHeight();
+      const mg = 15;
+      const pw2 = pw - mg * 2;
+
+      // Render seluruh container sekaligus, lalu potong dengan benar
+      const fullCanvas = await html2canvas(container, {
+        scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#ffffff',
+        windowWidth: 794,
+      });
+
+      const fullImgH = (fullCanvas.height * pw2) / fullCanvas.width;
+      const usableH  = ph - mg * 2;  // tinggi area cetak per halaman
+      const totalPages = Math.ceil(fullImgH / usableH);
+
+      for (let i = 0; i < totalPages; i++) {
+        if (i > 0) doc2.addPage();
+        // Geser gambar ke atas sesuai halaman, dengan margin atas
+        doc2.addImage(
+          fullCanvas.toDataURL('image/jpeg', 0.95),
+          'JPEG',
+          mg,
+          mg - i * usableH,
+          pw2,
+          fullImgH
+        );
+        // Tutup area luar margin dengan kotak putih atas dan bawah
+        doc2.setFillColor(255, 255, 255);
+        doc2.rect(0, 0, pw, mg, 'F');                  // tutup atas
+        doc2.rect(0, ph - mg, pw, mg, 'F');            // tutup bawah
+        doc2.rect(0, 0, mg, ph, 'F');                  // tutup kiri
+        doc2.rect(pw - mg, 0, mg, ph, 'F');            // tutup kanan
       }
 
-      doc.save(`catatan-kajian-${Date.now()}.pdf`);
+      doc2.save(`catatan-kajian-${Date.now()}.pdf`);
     } catch (err) {
       alert('Gagal export PDF: ' + err.message);
     } finally {
