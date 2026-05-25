@@ -205,7 +205,7 @@ function NotesView({ entries, onReset }) {
 
       doc.save(`catatan-kajian-${Date.now()}.pdf`);
     } catch (err) {
-      alert('Gagal export PDF: ' + err.message);
+      alert('Gagal export PDF: ' + err.message + '\n' + err.stack);
     } finally {
       setExporting(false);
     }
