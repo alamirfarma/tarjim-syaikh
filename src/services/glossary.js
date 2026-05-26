@@ -16,6 +16,9 @@
 
 export const ARABIC_GLOSSARY = {
   // Aqidah & Tauhid
+  "مفيد":"berfaedah",
+  "نافع":"bermanfaat",
+  "عون":"bantuan",
   "لا شك":"tidak ada keraguan",
   "يبحث":"mempelajari",
   "معلوم":"maklum",
@@ -50,7 +53,7 @@ export const ARABIC_GLOSSARY = {
   "واشهد ان محمدا عبده ورسوله":"Saya bersaksi bahwa Muhammad adalah hamba dan utusan-Nya",
   "الحمد لله رب العالمين":"Segala puji hanya bagi Allah Rabb semesta alam",
   "بسم الله الرحمن الرحيم":"Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang",
-  "أهل السنة والجماعة":"Ahlus Sunnah wal Jamaah",
+  "اهل السنه والجماعه":"Ahlus Sunnah wal Jamaah",
   "السلف الصالح":"as-Salafus Shalih",
   "الله":"Allah",
   "رب":"Rabb",
