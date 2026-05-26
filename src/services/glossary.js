@@ -67,10 +67,8 @@ export const ARABIC_GLOSSARY = {
   "سبحانه وتعالى":"subhanahu wata'ala",
   "الله سبحانه وتعالى":"Allah subhanahu wata'ala",
   "صلى الله عليه وسلم عليه وعلى اله واصحابه اجمعين":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya, keluarganya, dan seluruh sahabatnya",
-  "صلى الله وسلم عليه":"shallallahu wasallama 'alaih",
-  "صلى الله عليه وسلم":"shallallahu 'alaih wasallam",
-  "صلى الله":"shallallahu",
-  "وسلم":"wasallam",
+  "صلى الله وسلم عليه":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya",
+  "صلى الله عليه وسلم":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya",
   "اما بعد":"amma ba'du",
   "لا اله الا الله":"tidak ada sesembahan yang berhak untuk disembah selain Allah",
   "واشهد ان لا اله الا الله وحده لا شريك له":"Saya bersaksi bahwa tidak ada sesembahan yang berhak untuk disembah selain Allah semata, tidak ada sekutu bagi-Nya",
@@ -88,6 +86,7 @@ export const ARABIC_GLOSSARY = {
   "الولاء والبراء":"al-wala' wal-bara'",
   "الطاغوت":"thaghut",
   "العقيده":"aqidah",
+  "عقيده":"aqidah",
   "منهج السلف":"manhaj salaf",
 
   // Tambah entri baru di bawah ini ↓
