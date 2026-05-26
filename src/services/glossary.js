@@ -16,6 +16,7 @@
 
 export const ARABIC_GLOSSARY = {
   // Aqidah & Tauhid
+  "محمد":"Muhammad",
   "مفيد":"berfaedah",
   "نافع":"bermanfaat",
   "عون":"bantuan",
@@ -47,6 +48,8 @@ export const ARABIC_GLOSSARY = {
   "صلى الله عليه وسلم عليه وعلى اله واصحابه اجمعين":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya, keluarganya, dan seluruh sahabatnya",
   "صلى الله وسلم عليه":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya",
   "صلى الله عليه وسلم":"Semoga Allah senantiasa melimpahkan shalawat dan salam kepadanya",
+  "صلى الله":"Semoga Allah senantiasa melimpahkan shalawat",
+  "وسلم":"dan salam",
   "اما بعد":"Adapun setelahnya",
   "لا اله الا الله":"tidak ada sesembahan yang berhak untuk disembah selain Allah",
   "واشهد ان لا اله الا الله وحده لا شريك له":"Saya bersaksi bahwa tidak ada sesembahan yang berhak untuk disembah selain Allah semata, tidak ada sekutu bagi-Nya",
