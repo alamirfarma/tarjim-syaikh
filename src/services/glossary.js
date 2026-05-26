@@ -90,6 +90,18 @@ export const ARABIC_GLOSSARY = {
   "العقيده":"aqidah",
   "عقيده":"aqidah",
   "منهج السلف":"manhaj salaf",
+  "هذه العقيده":"aqidah ini",
+  "هذا الكتاب":"kitab ini",
+  "هذا المتن":"matan ini",
+  "هذا العلم":"ilmu ini",
+  "هذا الباب":"bab ini",
+  "هذا الامر":"perkara ini",
+  "هذا الدين":"agama ini",
+  "هذا التوحيد":"tauhid ini",
+  "هذه المساله":"masalah ini",
+  "هذه القاعده":"kaidah ini",
+  "هذا المنهج":"manhaj ini",
+  "هذا الاصل":"pokok ini",
 
   // Tambah entri baru di bawah ini ↓
 
