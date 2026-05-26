@@ -16,6 +16,22 @@
 
 export const ARABIC_GLOSSARY = {
   // Aqidah & Tauhid
+  "لا شك":"tidak ada keraguan",
+  "يبحث":"mempelajari",
+  "معلوم":"maklum",
+  "بشرف":"dengan kemuliaan",
+  "الاعتقاد":"aqidah",
+  "اشرف العلوم":"ilmu yang paling mulia",
+  "الاحبه":"terkasih",
+  "يا ايها الاحبه":"wahai orang-orang terkasih",
+  "متون":"matan-matan",
+  "متن":"matan",  
+  "متنا":"matan",
+  "شرف":"kemuliaan",
+  "النبوي":"nabawi",
+  "النبي":"nabi",
+  "فاضل":"utama",
+  "المجالس":"majelis",
   "قال الله":"Allah ta'ala berfirman",
   "قول الله":"firman Allah ta'ala",
   "ومن يضلل فلا هادي له":"dan siapapun yang Allah sesatkan maka tidak ada yang bisa memberikan petunjuk baginya",
